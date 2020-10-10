@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include<string.h>
 # define MAX 100
 char stack[MAX];
 int top=-1;
@@ -17,7 +18,7 @@ char pop()
 {
     char item;
     if (top==-1)
-        printf("\n stack is empty");
+        printf("\n stack is empty !");
     else
     {
         item=stack[top];
@@ -48,61 +49,64 @@ int priority(char ch)
         case '-':return (1);
         case '*':
         case '/':return (2);
+        case '^': return (3);
         default : return (0);
     }
 }
                  
-       
-   
-int main(int argc, char **argv)
+        
+    
+int main()
 {
-char infix[100];
-    int i, item;
+	char infix[100],postfix[100];
+    int i,j, item;
     printf("Enter the infix expression :");
     scanf("%s",infix);
     printf("Expression : %s",infix);
     printf("\n Postfix: ");
-    i=0;
+    i=0,j=0;
      while (infix[i]!='\0')
     {
-       
+        
        
         switch (infix[i])
         {
             case '(': push(infix[i]);
                       break;
             case ')':while(( item=pop())!='(')
-                        printf("%c",item);
+                        {
+                        postfix[j++]=item;
+                        }
                       break;
             case '+':
             case '-':
             case '*':
-            case '/':
+            case '/': 
+            case '^': 
                       while(!stackempty() && priority(infix[i])<=priority(stacktop()))
                       {
                             item=pop();
-                                                 
-                            printf("%c", item);
+                            postfix[j++]=item;
                       }
-                     
                       push(infix[i]);
                       break;
-            default : printf("%c", infix[i]);
+            default : postfix[j++]=infix[i];
                       break;
-                     
+                      
            
         }
          i++;
     }
-   
+    
     while(!stackempty())
     {
         char item;
         item=pop();
-        printf("%c", item);
-       
+        postfix[j++]=item;
+        
     }
-    printf("\n");                    
+    postfix[j]='\0';
+    puts(postfix);
     return 0;
 
 }
